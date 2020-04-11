@@ -16,6 +16,12 @@
 
     <properties>
         <java.version>1.8</java.version>
+
+
+        <docker.image.prefix>easonsu</docker.image.prefix>
+        <!-- docker harbor地址 -->
+        <docker.repostory>registry.cn-hangzhou.aliyuncs.com</docker.repostory>
+
     </properties>
 
     <dependencies>
@@ -42,6 +48,28 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- 使用Maven插件直接将应用打包为一个Docker镜像 -->
+            <plugin>
+                <groupId>com.spotify</groupId>
+                <!-- 这里使用新版dockerfile-maven-plugin插件 -->
+                <artifactId>dockerfile-maven-plugin</artifactId>
+                <version>1.4.10</version>
+                <configuration>
+                    <!-- Dockerfile目录指定   src/main/resources/docker/Dockerfile-->
+                    <dockerfile>Dockerfile</dockerfile>
+                    <!--suppress UnresolvedMavenProperty -->
+                    <repository>${docker.repostory}/${docker.image.prefix}/${project.artifactId}</repository>
+                    <!-- 生成镜像标签 如不指定 默认为latest -->
+                    <tag>${project.version}</tag>
+                    <username>linxi1711@163.com</username>
+                    <password>linxi1314</password>
+                    <buildArgs>
+                        <!-- 理论上这里定义的参数可以传递到Dockerfile文件中，目前未实现 -->
+                        <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
+                    </buildArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>
