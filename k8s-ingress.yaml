@@ -12,7 +12,7 @@ spec:
           - path: /hello
             backend:
               serviceName: k8s-java
-              servicePort: 80
+              servicePort: 8080
           # 配置Context Path
           - path: /coffee
             backend:
